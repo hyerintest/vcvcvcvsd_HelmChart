@@ -1,0 +1,65 @@
+mariadb:
+  configmap:
+    name: config-database-4gehbkvq6m-pt4xmqpeei
+  secret:
+    name: secret-database-4gehbkvq6m-pt4xmqpeei
+    username: test
+    password: "Root1234!"
+    root_password: "Root1234!"
+    database: test
+    dbhost: database-4gehbkvq6m-pt4xmqpeei
+    port: 3306.0
+  statefulset:
+    name: database-4gehbkvq6m-pt4xmqpeei
+    image:
+      url: registry.turacocloud.com/turaco-common/mariadb:10.4.11
+service:
+  port:
+    name: http
+    l4_protocol: TCP
+    port: 3306.0
+    targetPort: 3306.0
+  label: database-4gehbkvq6m-pt4xmqpeei
+  name: database-4gehbkvq6m-pt4xmqpeei
+  selector: database-4gehbkvq6m-pt4xmqpeei
+  type:
+  - ClusterIP
+  - NodePort
+statefulset:
+  name: database-4gehbkvq6m-pt4xmqpeei
+  spec:
+    name: database-4gehbkvq6m-pt4xmqpeei
+    servicename: database-4gehbkvq6m-pt4xmqpeei
+  replicas: -@replicas@-
+  container:
+    name: database-4gehbkvq6m-pt4xmqpeei
+    port: 3306.0
+  volume:
+    name: pvc-database-4gehbkvq6m-pt4xmqpeei
+  resource:
+    request:
+      memory: -@requestMemory@-
+      cpu: -@requestCpu@-
+    limits:
+      memory: -@limitsMemory@-
+      cpu: -@limitsCpu@-
+  hpa:
+    name: hpa-database-4gehbkvq6m-pt4xmqpeei
+    minReplicas: -@minReplicas@-
+    maxReplicas: -@maxReplicas@-
+    cpu: -@cpuAutoScale@-
+    memory: -@memAutoScale@-
+namespace: -@namespace@-
+secret:
+  name: 
+  registry:
+    name: regsecret
+    url: -@imageRepoName@-
+    username: -@accessKey@-
+    password: -@secretKey@-
+    email: info@twolinecode.com
+pvc:
+  name: pvc-database-4gehbkvq6m-pt4xmqpeei
+  storageClass: tlc-block-sc
+  size: 5Gi
+  accessMode: ReadWriteOnce
